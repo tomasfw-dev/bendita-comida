@@ -1,5 +1,8 @@
 /**
  * Rate limiting — login, testimonios públicos y límite global suave.
+ *
+ * Requiere app.set('trust proxy', 1) en producción (ver backend/app.js) cuando hay
+ * Nginx delante; validate.trustProxy lo comprueba en cada limiter.
  */
 const { rateLimit } = require('express-rate-limit');
 const config = require('../config');

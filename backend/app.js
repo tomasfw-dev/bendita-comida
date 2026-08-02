@@ -12,7 +12,6 @@ const {
   attachCsrfToken,
   verifyCsrfUnlessMultipart,
 } = require('./middlewares/csrf.middleware');
-const { globalRateLimiter } = require('./middlewares/rateLimit.middleware');
 const createHelmetMiddleware = require('./config/helmet.config');
 const createSessionMiddleware = require('./config/session.config');
 const imageHelper = require('./utils/image.helpers');
@@ -23,9 +22,12 @@ const app = express();
 
 app.disable('x-powered-by');
 
+// Nginx (único proxy) envía X-Forwarded-For. Debe configurarse antes de express-rate-limit.
 if (config.env === 'production') {
   app.set('trust proxy', 1);
 }
+
+const { globalRateLimiter } = require('./middlewares/rateLimit.middleware');
 
 app.use(createHelmetMiddleware(config.env === 'production'));
 
